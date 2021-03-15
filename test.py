@@ -1,4 +1,4 @@
-def build_tree(tree_data):
+ddef build_tree(tree_data):
     #names with no parents
     names = set()
     root = {}
@@ -15,21 +15,26 @@ def build_tree(tree_data):
             names.add(parent)
         else:
             parent_obj[child] = child_obj
-
+    
     tree = {name : root[name] for name in names}
-    # print (tree)
     return tree
 
+def is_found(subtree,name):
+    if type(subtree) is not dict:
+        return False
+    if name in subtree:
+        return True
+    for tree in subtree:
+        is_found(tree, name)
 
 def find_parent(tree, name):
-    
-    if name in tree.keys():
+    if name in tree:
         return name
-    while type(tree) is dict:
-        for parent, children in tree.items():
-            tree = children    
-            if name in tree:
-                return parent
+    for item in tree:    
+        if is_found(tree[item], name):
+            return item
+    
+
 
 if __name__ == "__main__":
     tree_data = [
@@ -41,8 +46,9 @@ if __name__ == "__main__":
     ("Paul", "Mircea"),
     ('Aneta', 'Vasilica'),
     ('Aneta', 'Georgel'),
+    ('MiniDana', 'Dana'),
 ]
     tree = build_tree(tree_data)
-    # print(f"Oldest in lineage is {oldest}")
-    name = find_parent(tree, 'Paul')
+    print(tree)
+    name = find_parent(tree, 'Dana')
     print(name)
