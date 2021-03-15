@@ -1,4 +1,4 @@
-def find_oldest_in_lineage(tree_data):
+def build_tree(tree_data):
     #names with no parents
     names = set()
     root = {}
@@ -16,10 +16,20 @@ def find_oldest_in_lineage(tree_data):
         else:
             parent_obj[child] = child_obj
 
-    # tree = {name : root[name] for name in names}
-    # print(tree)
-    return names
+    tree = {name : root[name] for name in names}
+    # print (tree)
+    return tree
 
+
+def find_parent(tree, name):
+    
+    if name in tree.keys():
+        return name
+    while type(tree) is dict:
+        for parent, children in tree.items():
+            tree = children    
+            if name in tree:
+                return parent
 
 if __name__ == "__main__":
     tree_data = [
@@ -28,9 +38,11 @@ if __name__ == "__main__":
     ("Dana","Paul"),
     ("Dana", "Marcela"),
     ("Paul", "Aneta"),
-    ("Paul", " Mircea")
+    ("Paul", "Mircea"),
+    ('Aneta', 'Vasilica'),
+    ('Aneta', 'Georgel'),
 ]
-    ancestors = find_oldest_in_lineage(tree_data)
-    print(ancestors)
-
-
+    tree = build_tree(tree_data)
+    # print(f"Oldest in lineage is {oldest}")
+    name = find_parent(tree, 'Paul')
+    print(name)
